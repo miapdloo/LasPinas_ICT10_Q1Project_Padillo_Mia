@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skills Test - Receipt Generator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+     
+      background-image: url('ictimg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+
+   
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: rgba(230, 188, 214, 0.92);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .menu-item {
+      margin: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+
+    .menu-item input {
+      width: 60px;
+      padding: 4px;
+    }
+
+
+    .summary {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+
+
+    button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #4f3331;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+
+    button:hover {
+      background-color: #36201E;
+    }
+
+  </style>
+</head>
+<body>
+
+
+  <div class="container">
+    <h1 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: center;">Mia's Mentos</h1>
+    <p style="text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Flavor and freshness all in one</p>
+
+
+    <hr>
+
+
+    <h2 style="text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">List of flavors:</h2>
+   
+    <div class="menu-item">
+      <label for="peppermint" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mentos Pure Fresh Peppermint Tins (35g): 175 Php </label>
+      <input type="checkbox" min="0" value="0" id="peppermint">
+    </div>
+   
+    <div class="menu-item">
+      <label for="strawberry" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mentos Pure Fresh Strawberry Mints Tin (35g): 105 Php </label>
+      <input type="checkbox" min="0" value="0" id="strawberry">
+    </div>
+   
+    <div class="menu-item">
+      <label for="grape" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mentos Sugar-Free Grape Mint (17.5g x 2-pack): 175 Php </label>
+      <input type="checkbox" min="0" value="0" id="grape">
+    </div>
+   
+    <div class="menu-item">
+      <label for="peach" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mentos Sugar-Free Peach Mint (17.5g x 2-pack): 175 Php </label>
+      <input type="checkbox" min="0" value="0" id="peach">
+    </div>
+   
+    <div class="menu-item">
+      <label for="icecube" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mentos Ice Cube Sugar-Free Chewing Gum (46g): 115 Php </label>
+      <input type="checkbox" min="0" value="0" id="icecube">
+    </div>
+
+
+    <button onclick="confirmOrder()" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Confirm Order</button>
+
+
+    <div class="summary" id="summary" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+      <p>Your order summary will appear here.</p>
+    </div>
+
+
+    <br>
+    <nav>
+      <a href="sku.html" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Generate SKU</a>
+    </nav>
+  </div>
+
+
+   <script>
+    function confirmOrder() {
+      const prices = {
+        peppermint: 175,
+        strawberry: 105,
+        grape: 175,
+        peach: 175,
+        icecube: 115
+      };
+     
+     
+      let summaryText = "<h3><strong>===RECEIPT===</strong></h3><ul>";
+      let overallSubtotal = 0;
+      let total = 0; 
+      for (let item in prices) {
+        let element = document.getElementById(item);
+        
+        
+        if (element) {
+          let isChecked = element.checked;
+          let subt = isChecked ? 1 : 0; 
+         
+          if (subt > 0) {
+            let cost = subt * prices[item]; 
+            let itemTax = cost * 0.12;       
+            let costWithTax = cost + itemTax; 
+            
+            
+            summaryText += `<li>${subt} × ${capitalize(item)} — ₱${costWithTax.toFixed(2)}</li>`;
+            total += costWithTax; 
+            overallSubtotal += cost;
+          }
+        }
+      }
+
+      summaryText += `</ul>`;
+
+      
+      if (overallSubtotal > 0) {
+        let totalTax = overallSubtotal * 0.12;
+        let grandTotal = overallSubtotal + totalTax;
+
+        summaryText += `<p>Subtotal: ₱${overallSubtotal.toFixed(2)}</p>`;
+        summaryText += `<p>Tax: ₱${totalTax.toFixed(2)}</p>`;
+        summaryText += `<p><strong>TOTAL AMOUNT: ₱${grandTotal.toFixed(2)}</strong></p>`;
+      }
+
+      
+      if (total === 0) {
+        summaryText = "<p>*No added items* TOTAL AMOUNT: ₱0.00</p>";
+      }
+
+      
+      document.getElementById("summary").innerHTML = summaryText;
+    }
+
+    function capitalize(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+  </script> 
+
+</body>
+</html>
